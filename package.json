@@ -21,6 +21,8 @@
     "remark-highlight.js": "^5.2.0",
     "remark-html": "^10.0.0",
     "remark-midas": "^5.1.1",
+    "three": "^0.114.0",
+    "three-orbit-controls": "^82.1.0",
     "uuid": "^7.0.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
