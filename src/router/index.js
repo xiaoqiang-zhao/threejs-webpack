@@ -19,11 +19,11 @@ export default new Router({
             name: 'summary',
             component: () => import('@/pages/summary')
         },
-        // 规范基础
+        // 航拍
         {
-            path: '/standard-base',
-            name: 'standard-base',
-            component: () => import('@/pages/standard-base')
+            path: '/demo-01',
+            name: 'demo-01',
+            component: () => import('@/pages/demo-01')
         }
     ]
 });

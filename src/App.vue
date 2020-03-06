@@ -44,8 +44,8 @@ export default {
                     level: 1
                 },
                 {
-                    name: 'standard-base',
-                    text: '通用样式基础规范',
+                    name: 'demo-01',
+                    text: '航拍',
                     level: 2
                 }
             ]
