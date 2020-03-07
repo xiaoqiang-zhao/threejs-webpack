@@ -62,12 +62,12 @@ export default {
         scene.add(cylinder);
 
         // 创建平面接受阴影投射
-        var planeGeometry = new THREE.PlaneGeometry(20000, 10000);
+        var planeGeometry = new THREE.PlaneGeometry(20, 10);
         var planeMaterial = new THREE.MeshStandardMaterial({
             color: 0xc4c4c4
         });
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.position.set(-100 , -100, -5);
+        plane.position.set(0 , 0, -5);
         plane.receiveShadow = true;
         scene.add(plane);
 
