@@ -85,15 +85,18 @@ export default {
         directionalLight.shadow.camera.far = 500;     // default
         scene.add(directionalLight);
 
+        // 角度
         let angle = 0;
+        // 半径
+        const radius = 3;
         var render = function () {
             requestAnimationFrame(render);
 
             angle += 0.01;
-            let x = 5 * Math.cos(angle);
-            let y = 5 * Math.sin(angle);
+            let x = radius * Math.cos(angle);
+            let y = radius * Math.sin(angle);
 
-            camera.position.set(x, y, 5);
+            camera.position.set(x, y, 3);
             camera.lookAt(0, 0, 0);
 
             renderer.render(scene, camera);
