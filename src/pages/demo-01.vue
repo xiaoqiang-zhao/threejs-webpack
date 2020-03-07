@@ -22,7 +22,7 @@ export default {
         const width = window.innerWidth - space;
         const height = window.innerHeight - space;
         var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
-        camera.position.set(5, 0, 5);
+        camera.position.set(5, 0, 3);
         camera.lookAt(0, 0, 0);
 
         // 渲染器
