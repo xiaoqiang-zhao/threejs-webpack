@@ -11,7 +11,7 @@
             <el-button type="primary" @click="runDemoB">运行 Demo</el-button>
         </p> -->
         <div id="demo-b-canvas-container"></div>
-
+        <markdown-doc-content :mdContent="demoBCodeMdContent"/>
     </div>
 </template>
 
@@ -23,6 +23,7 @@ import markdownDocContent from '@/components/markdown-doc-content.vue';
 import baseMdContent from './demo-01.md';
 import demoAMdContent from './demo-01-a.md';
 import demoBDescriptionMdContent from './demo-01-b-des.md';
+import demoBCodeMdContent from './demo-01-b-code.md';
 
 export default {
     components: {
@@ -36,7 +37,8 @@ export default {
         return {
             mdContent: baseMdContent,
             demoAMdContent,
-            demoBDescriptionMdContent
+            demoBDescriptionMdContent,
+            demoBCodeMdContent
         };
     },
     methods: {
@@ -209,6 +211,7 @@ export default {
          */
         runDemoB() {
             const {scene, renderer, camera} = this.runBase('demo-b-canvas-container');
+            this.addHelperLine(scene);
 
             // 控制器
             const Controls = OrbitControls(THREE);
@@ -225,8 +228,6 @@ export default {
             //     console.log("水平旋转 azimuthalAngle: ", controls.getAzimuthalAngle ());
             //     console.log("垂直旋转 polarAngle: ", controls.getPolarAngle());
             // });
-
-            this.addHelperLine(scene);
 
             controls.update();
             function animate() {
