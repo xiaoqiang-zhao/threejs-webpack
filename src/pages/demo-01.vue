@@ -54,10 +54,11 @@ export default {
 
             // 摄像机
             const space = 208;
-            const width = window.innerWidth - space;
-            const height = window.innerHeight - space;
+            const width = 1232;
+            const height = 900;
             var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
-            camera.position.set(5, 0, 3);
+            
+            camera.position.set(5, 0, 10);
             camera.lookAt(0, 0, 0);
 
             // 渲染器
@@ -103,16 +104,26 @@ export default {
                 color: 0xc4c4c4
             });
             var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-            plane.position.set(0 , 0, -5);
+            plane.position.set(0 , 0, -2);
             plane.receiveShadow = true;
+            // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
+            plane.material.side = THREE.DoubleSide;
             scene.add(plane);
+            // var box2 = new THREE.BoxGeometry(10, 5, 0.1, 100);
+            // var cube2 = new THREE.Mesh(box2, new THREE.MeshStandardMaterial({
+            //     color: 0xc4c4c4
+            // }));
+            // cube2.position.set(0, 0, -2);
+            // cube2.receiveShadow = true;
+            // scene.add(cube2);
+
 
             // 光 - 环境光使物体整体可见
             var light = new THREE.AmbientLight(0x404040); // soft white light
             scene.add(light);
             // 光 - 平行光展示阴影
             var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLight.position.set(0, 0, 5);
+            directionalLight.position.set(0, 0, 50);
             directionalLight.castShadow = true;
             directionalLight.shadow.bias = 0.1;
             directionalLight.shadow.mapSize.width = 512;  // default
@@ -121,7 +132,7 @@ export default {
             directionalLight.shadow.camera.far = 500;     // default
             scene.add(directionalLight);
             var backDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
-            backDirectionalLight.position.set(0, 0, -5);
+            backDirectionalLight.position.set(0, 0, -50);
             scene.add(backDirectionalLight);
 
             return {

@@ -40,7 +40,7 @@ export default {
                 {
                     name: 'summary',
                     aliasName: 'default',
-                    text: '小强赵 Demo 集合',
+                    text: 'ThreeJs Demo 集合',
                     level: 1
                 },
                 {
