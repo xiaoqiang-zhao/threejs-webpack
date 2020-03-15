@@ -47,6 +47,11 @@ export default {
                     name: 'demo-01',
                     text: '航拍',
                     level: 2
+                },
+                {
+                    name: 'demo-02',
+                    text: '平面(PlaneGeometry)',
+                    level: 2
                 }
             ]
         };

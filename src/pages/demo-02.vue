@@ -1,17 +1,8 @@
 <template>
-    <div class="demo-01 markdown">
+    <div class="demo-02 markdown">
         <markdown-doc-content :mdContent="mdContent"/>
-        <!-- <p>
-            <el-button type="primary" @click="runDemoA">运行 Demo</el-button>
-        </p> -->
         <div id="demo-a-canvas-container"></div>
-        <markdown-doc-content :mdContent="demoAMdContent"/>
-        <markdown-doc-content :mdContent="demoBDescriptionMdContent"/>
-        <!-- <p>
-            <el-button type="primary" @click="runDemoB">运行 Demo</el-button>
-        </p> -->
-        <div id="demo-b-canvas-container"></div>
-        <markdown-doc-content :mdContent="demoBCodeMdContent"/>
+        <markdown-doc-content :mdContent="demoCodeMdContent"/>
     </div>
 </template>
 
@@ -20,10 +11,8 @@ import * as THREE from 'three/build/three.module.js';
 import OrbitControls from 'three-orbit-controls';
 
 import markdownDocContent from '@/components/markdown-doc-content.vue';
-import baseMdContent from './demo-01.md';
-import demoAMdContent from './demo-01-a.md';
-import demoBDescriptionMdContent from './demo-01-b-des.md';
-import demoBCodeMdContent from './demo-01-b-code.md';
+import baseMdContent from './demo-02.md';
+import demoCodeMdContent from './demo-02-code.md';
 
 export default {
     components: {
@@ -31,14 +20,11 @@ export default {
     },
     mounted() {
         this.runDemoA();
-        this.runDemoB();
     },
     data() {
         return {
             mdContent: baseMdContent,
-            demoAMdContent,
-            demoBDescriptionMdContent,
-            demoBCodeMdContent
+            demoCodeMdContent
         };
     },
     methods: {
@@ -50,7 +36,9 @@ export default {
          */
         runBase(containerId) {
             // 场景
-            var scene = new THREE.Scene();
+            var scene = new THREE.Scene({
+                background: 0x000000
+            });
 
             // 摄像机
             const space = 208;
@@ -58,7 +46,7 @@ export default {
             const height = 900;
             var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
             
-            camera.position.set(5, 0, 10);
+            camera.position.set(0, 5, 10);
             camera.lookAt(0, 0, 0);
 
             // 渲染器
@@ -76,64 +64,29 @@ export default {
             const canvasContainer = document.getElementById(containerId);
             canvasContainer.appendChild(renderer.domElement);
 
-            // 材质
-            var material = new THREE.MeshStandardMaterial({
-                color: 0x4169E1
-            });
-
-            // 几何图形 - 长方体
-            var box = new THREE.BoxGeometry(1, 1, 1, 10);
-            var cube = new THREE.Mesh(box, material);
-            cube.position.set(-2, 0, 0);
-            cube.castShadow = true;
-            cube.receiveShadow = false;
-            scene.add(cube);
-            
-            // 几何图形 - 圆柱
-            var cylinderGeometry = new THREE.CylinderGeometry(0.3, 0.3, 3, 100);
-            var cylinder = new THREE.Mesh(cylinderGeometry, material);
-            cylinder.position.set(2, 0, 0);
-            cylinder.castShadow = true;
-            cylinder.receiveShadow = false;
-            scene.add(cylinder);
-
-
-            // 创建平面接受阴影投射
-            var planeGeometry = new THREE.PlaneGeometry(20, 10);
-            var planeMaterial = new THREE.MeshStandardMaterial({
-                color: 0xc4c4c4
-            });
-            var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-            plane.position.set(0 , 0, -2);
-            plane.receiveShadow = true;
-            // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
-            plane.material.side = THREE.DoubleSide;
-            scene.add(plane);
-            // var box2 = new THREE.BoxGeometry(10, 5, 0.1, 100);
-            // var cube2 = new THREE.Mesh(box2, new THREE.MeshStandardMaterial({
-            //     color: 0xc4c4c4
-            // }));
-            // cube2.position.set(0, 0, -2);
-            // cube2.receiveShadow = true;
-            // scene.add(cube2);
-
-
             // 光 - 环境光使物体整体可见
             var light = new THREE.AmbientLight(0x404040); // soft white light
             scene.add(light);
             // 光 - 平行光展示阴影
             var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLight.position.set(0, 0, 50);
+            directionalLight.position.set(2, 5, 5);
             directionalLight.castShadow = true;
-            directionalLight.shadow.bias = 0.1;
-            directionalLight.shadow.mapSize.width = 512;  // default
-            directionalLight.shadow.mapSize.height = 512; // default
-            directionalLight.shadow.camera.near = 0.5;    // default
-            directionalLight.shadow.camera.far = 500;     // default
+            directionalLight.shadowDarkness = 0.5;
             scene.add(directionalLight);
+            // 背面光
             var backDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
             backDirectionalLight.position.set(0, 0, -50);
+            backDirectionalLight.castShadow = true;
             scene.add(backDirectionalLight);
+
+            // 放一个球模拟平行光源
+            var sphereMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffffff
+            });
+            const sphereGeometry = new THREE.SphereGeometry(0.1, 5, 5);
+            var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.position.set(2, 5, 5);
+            scene.add(sphere);
 
             return {
                 scene,
@@ -191,39 +144,9 @@ export default {
         },
 
         /**
-         * 运行 Demo A: 手动设置航拍轨迹
+         * 渲染
          */
-        runDemoA() {
-            
-            const {scene, renderer, camera} = this.runBase('demo-a-canvas-container');
-
-            // 角度
-            let angle = 0;
-            // 半径
-            const radius = 3;
-            var render = function () {
-                requestAnimationFrame(render);
-
-                angle += 0.01;
-                let x = radius * Math.cos(angle);
-                let y = radius * Math.sin(angle);
-
-                camera.position.set(x, y, 3);
-                camera.lookAt(0, 0, 0);
-
-                renderer.render(scene, camera);
-            };
-
-            render();
-        },
-
-        /**
-         * 运行 Demo A: 使用轨道控制器航拍
-         */
-        runDemoB() {
-            const {scene, renderer, camera} = this.runBase('demo-b-canvas-container');
-            this.addHelperLine(scene);
-
+        render(scene, renderer, camera) {
             // 控制器
             const Controls = OrbitControls(THREE);
             const controls = new Controls(camera, renderer.domElement);
@@ -235,10 +158,6 @@ export default {
                 RIGHT: 39, // right arrow
                 BOTTOM: 40 // down arrow
             };
-            // controls.addEventListener('change', function(){
-            //     console.log("水平旋转 azimuthalAngle: ", controls.getAzimuthalAngle ());
-            //     console.log("垂直旋转 polarAngle: ", controls.getPolarAngle());
-            // });
 
             controls.update();
             function animate() {
@@ -247,11 +166,76 @@ export default {
 
                 // required if controls.enableDamping or controls.autoRotate are set to true
                 controls.update();
-
+                // renderer.setClearAlpha(0.0);
                 renderer.render(scene, camera);
 
             }
             animate();
+        },
+
+        /**
+         * 运行 Demo A: 手动设置航拍轨迹
+         */
+        runDemoA() {
+            
+            const {scene, renderer, camera} = this.runBase('demo-a-canvas-container');
+            this.addHelperLine(scene);
+
+            // 平面一
+            var planeGeometry = new THREE.PlaneGeometry(5, 3, 50);
+            var planeMaterial = new THREE.MeshStandardMaterial({
+                color: 0xc4c4c4,
+                side: THREE.DoubleSide
+            });
+            var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane.position.set(0, 0, 0);
+            plane.receiveShadow = true;
+            
+            scene.add(plane);
+
+            // 平面二
+            var planeGeometry2 = new THREE.PlaneGeometry(2.5, 1.5, 50);
+            var planeMaterial2 = new THREE.MeshStandardMaterial({
+                color: 0x4169E1,
+                opacity: 0.4
+            });
+            var plane2 = new THREE.Mesh(planeGeometry2, planeMaterial2);
+            plane2.position.set(0, 0, 0);
+            plane2.castShadow = true;
+            plane2.receiveShadow = true;
+            // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
+            plane2.material.side = THREE.DoubleSide;
+            plane2.lookAt(0, 1, 0);
+            scene.add(plane2);
+
+            // 平面三
+            var planeGeometry3 = new THREE.PlaneGeometry(2.5, 1.5, 50);
+            var planeMaterial3 = new THREE.MeshStandardMaterial({
+                color: 0x4169E1,
+                side: THREE.DoubleSide,
+                // 透明度设置
+                transparent: true,
+                opacity: 0.8,
+                flatShading: true
+            });
+            var plane3 = new THREE.Mesh(planeGeometry3, planeMaterial3);
+            plane3.position.set(1.25, 0, 0);
+            plane3.castShadow = true;
+            // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
+            plane3.material.side = THREE.DoubleSide;
+            plane3.lookAt(0, 0, 0);
+            scene.add(plane3);
+
+            // 平面四
+            var plane4 = new THREE.Mesh(planeGeometry3, planeMaterial3);
+            plane4.position.set(-1.25, 0, 0);
+            plane4.castShadow = true;
+            plane4.receiveShadow = true;
+            plane4.lookAt(0, 0, 0);
+            scene.add(plane4);
+
+
+            this.render(scene, renderer, camera);
         }
     }
 };
@@ -259,7 +243,7 @@ export default {
 
 <style lang="less" scope>
 @import '../assets/base.less';
-.demo-01 {
+.demo-02 {
     
 }
 </style>
