@@ -52,12 +52,16 @@ export default {
             // 渲染器
             var renderer = new THREE.WebGLRenderer({
                 // 抗锯齿
-                antialias: true
+                antialias: true,
+                // 背景透明，可以看到 canvas 下的东西
+                // alpha: true
             });
             renderer.setSize(window.innerWidth, window.innerHeight);
+            // 开启阴影计算
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                
+            renderer.shadowMapSoft = true;
+
             // 设置大小
             renderer.setSize(width, height);
             // 添加渲染器生成的 canvas 到页面的 body 中
@@ -65,17 +69,18 @@ export default {
             canvasContainer.appendChild(renderer.domElement);
 
             // 光 - 环境光使物体整体可见
-            var light = new THREE.AmbientLight(0x404040); // soft white light
+            var light = new THREE.AmbientLight(0xffffff, 0.8); // soft white light
             scene.add(light);
             // 光 - 平行光展示阴影
             var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
             directionalLight.position.set(2, 5, 5);
             directionalLight.castShadow = true;
-            directionalLight.shadowDarkness = 0.5;
+            directionalLight.shadowDarkness = 0.3;
             scene.add(directionalLight);
             // 背面光
             var backDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
             backDirectionalLight.position.set(0, 0, -50);
+            // 光照开启阴影
             backDirectionalLight.castShadow = true;
             scene.add(backDirectionalLight);
 
@@ -215,8 +220,7 @@ export default {
                 side: THREE.DoubleSide,
                 // 透明度设置
                 transparent: true,
-                opacity: 0.8,
-                flatShading: true
+                opacity: 0.8
             });
             var plane3 = new THREE.Mesh(planeGeometry3, planeMaterial3);
             plane3.position.set(1.25, 0, 0);

@@ -8,8 +8,7 @@ var planeMaterial = new THREE.MeshStandardMaterial({
     side: THREE.DoubleSide,
     // 透明度设置
     transparent: true,
-    opacity: 0.8,
-    flatShading: true
+    opacity: 0.8
 });
 var plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.position.set(1.25, 0, 0);
