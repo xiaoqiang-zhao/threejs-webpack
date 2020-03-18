@@ -45,11 +45,16 @@ export default {
                 },
                 {
                     name: 'demo-01',
-                    text: '航拍',
+                    text: 'Camera 航拍',
                     level: 2
                 },
                 {
                     name: 'demo-02',
+                    text: '点(Point)',
+                    level: 2
+                },
+                {
+                    name: 'demo-04',
                     text: '平面(PlaneGeometry)',
                     level: 2
                 }

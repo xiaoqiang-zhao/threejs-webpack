@@ -25,11 +25,17 @@ export default new Router({
             name: 'demo-01',
             component: () => import('@/pages/demo-01')
         },
-        // 平面
+        // 点
         {
             path: '/demo-02',
             name: 'demo-02',
             component: () => import('@/pages/demo-02')
+        },
+        // 平面
+        {
+            path: '/demo-04',
+            name: 'demo-04',
+            component: () => import('@/pages/demo-04')
         }
     ]
 });

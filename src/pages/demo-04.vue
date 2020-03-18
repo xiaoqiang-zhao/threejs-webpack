@@ -11,15 +11,15 @@ import * as THREE from 'three/build/three.module.js';
 import OrbitControls from 'three-orbit-controls';
 
 import markdownDocContent from '@/components/markdown-doc-content.vue';
-import baseMdContent from './demo-02.md';
-import demoCodeMdContent from './demo-02-code.md';
+import baseMdContent from './demo-04.md';
+import demoCodeMdContent from './demo-04-code.md';
 
 export default {
     components: {
         markdownDocContent
     },
     mounted() {
-        this.runDemo();
+        this.runDemoA();
     },
     data() {
         return {
@@ -77,6 +77,21 @@ export default {
             directionalLight.castShadow = true;
             directionalLight.shadowDarkness = 0.3;
             scene.add(directionalLight);
+            // 背面光
+            var backDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
+            backDirectionalLight.position.set(0, 0, -50);
+            // 光照开启阴影
+            backDirectionalLight.castShadow = true;
+            scene.add(backDirectionalLight);
+
+            // 放一个球模拟平行光源
+            var sphereMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffffff
+            });
+            const sphereGeometry = new THREE.SphereGeometry(0.1, 5, 5);
+            var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.position.set(2, 5, 5);
+            scene.add(sphere);
 
             return {
                 scene,
@@ -164,65 +179,65 @@ export default {
         },
 
         /**
-         * 运行 Demo: 手动设置航拍轨迹
+         * 运行 Demo A: 手动设置航拍轨迹
          */
-        runDemo() {
+        runDemoA() {
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
             this.addHelperLine(scene);
 
-            // -- 第一个默认粒子 -- //
-            // 点的几何体
-            const pointGeometry = new THREE.Geometry();
-            // 点的位置
-            const position = new THREE.Vector3(1, 1, 1);
-            const position2 = new THREE.Vector3(-1, -1, -1);
-            pointGeometry.vertices.push(position, position2);
-            // 点的材质
-            const pointMaterial = new THREE.PointsMaterial({
-                color: 0x888888,
-                size: 0.1
+            // 平面一
+            var planeGeometry = new THREE.PlaneGeometry(5, 3, 50);
+            var planeMaterial = new THREE.MeshStandardMaterial({
+                color: 0xc4c4c4,
+                side: THREE.DoubleSide
             });
-            const point = new THREE.Points(pointGeometry, pointMaterial);
-            scene.add(point);
+            var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane.position.set(0, 0, 0);
+            plane.receiveShadow = true;
+            
+            scene.add(plane);
 
-            // // 几何结构和材质
-            // const geom = new THREE.Geometry();
-            // const material = new THREE.ParticleBasicMaterial({ 
-            //     color: 0x00FFFF, 
-            //     size: 0.1
-            // });
+            // 平面二
+            var planeGeometry2 = new THREE.PlaneGeometry(2.5, 1.5, 50);
+            var planeMaterial2 = new THREE.MeshStandardMaterial({
+                color: 0x4169E1,
+                opacity: 0.4
+            });
+            var plane2 = new THREE.Mesh(planeGeometry2, planeMaterial2);
+            plane2.position.set(0, 0, 0);
+            plane2.castShadow = true;
+            plane2.receiveShadow = true;
+            // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
+            plane2.material.side = THREE.DoubleSide;
+            plane2.lookAt(0, 1, 0);
+            scene.add(plane2);
 
-            // // 颜色和坐标
-            // const color = new THREE.Color(0x0000ff);
-            // const position = new THREE.Vector3(1, 1, 1);
+            // 平面三
+            var planeGeometry3 = new THREE.PlaneGeometry(2.5, 1.5, 50);
+            var planeMaterial3 = new THREE.MeshStandardMaterial({
+                color: 0x4169E1,
+                side: THREE.DoubleSide,
+                // 透明度设置
+                transparent: true,
+                opacity: 0.8
+            });
+            var plane3 = new THREE.Mesh(planeGeometry3, planeMaterial3);
+            plane3.position.set(1.25, 0, 0);
+            plane3.castShadow = true;
+            // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
+            plane3.material.side = THREE.DoubleSide;
+            plane3.lookAt(0, 0, 0);
+            scene.add(plane3);
 
-            // // 为几何结构指定坐标和颜色
-            // geom.vertices.push(position);
-            // geom.colors.push(color);
+            // 平面四
+            var plane4 = new THREE.Mesh(planeGeometry3, planeMaterial3);
+            plane4.position.set(-1.25, 0, 0);
+            plane4.castShadow = true;
+            plane4.receiveShadow = true;
+            plane4.lookAt(0, 0, 0);
+            scene.add(plane4);
 
-            // // 创建粒子系统 
-            // var system =  new THREE.ParticleSystem(geom, material);
-            // // 将粒子系统加入场景 
-            // scene.add(system);
-
-            // 第二个圆形粒子
-            // const craGeom = new THREE.Geometry();
-            // const craPosition = new THREE.Vector3(-1, -1, -1);
-            // craGeom.vertices.push(craPosition);
-            // const craMaterial = new THREE.SpriteMaterial({
-            //     color: 0xffffff,    //粒子的颜色
-            //     program(context) { //用于绘制粒子的方法
-            //         context.beginPath();
-            //         context.arc(0, 0, 0.5, 0, PI2, true ); //画一个圆形。此处可修改大小。
-            //         context.fill();
-            //     }
-            // });
-            // var sprite = new THREE.Sprite(craMaterial);
-            // sprite.scale.set(200, 200, 1);
-            // scene.add(sprite);
-            // var craSystem =  new THREE.ParticleSystem(craGeom, craMaterial);
-            // scene.add(craSystem);
 
             this.render(scene, renderer, camera);
         }

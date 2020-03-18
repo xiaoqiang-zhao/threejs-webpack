@@ -1,23 +1,23 @@
+点没有固定的几何体，直接用 `THREE.Geometry` 做容器，然后放入坐标值，点的基础材质是 `THREE.PointsMaterial`，生成点的代码如下:
+
 核心代码:
 
 ```js
-var planeGeometry = new THREE.PlaneGeometry(2.5, 1.5, 50);
-var planeMaterial = new THREE.MeshStandardMaterial({
-    color: 0x4169E1,
-    // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
-    side: THREE.DoubleSide,
-    // 透明度设置
-    transparent: true,
-    opacity: 0.8
+// 点的几何体
+const pointGeometry = new THREE.Geometry();
+// 点的位置
+const position = new THREE.Vector3(1, 1, 1);
+const position2 = new THREE.Vector3(-1, -1, -1);
+pointGeometry.vertices.push(position, position2);
+// 点的材质
+const pointMaterial = new THREE.PointsMaterial({
+    color: 0x888888,
+    size: 0.1
 });
-var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-plane.position.set(1.25, 0, 0);
-plane.castShadow = true;
-
-plane.lookAt(0, 0, 0);
-scene.add(plane);
+const point = new THREE.Points(pointGeometry, pointMaterial);
+scene.add(point);
 ```
 
-注意设置双面可见平面。还可以设置平面的半透明度。
+## 参考
 
-有一个问题没有解决，在设置完平面的半透明度后，投影没有变淡，和完全不透明的投影相同。
+3D粒子波浪动画: https://www.jianshu.com/p/d2af195ba4db
