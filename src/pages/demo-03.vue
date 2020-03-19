@@ -1,5 +1,5 @@
 <template>
-    <div class="demo-02 markdown">
+    <div class="demo-03 markdown">
         <markdown-doc-content :mdContent="mdContent"/>
         <div id="demo-canvas-container"></div>
         <markdown-doc-content :mdContent="demoCodeMdContent"/>
@@ -19,7 +19,7 @@ export default {
         markdownDocContent
     },
     mounted() {
-        this.runDemoA();
+        this.runDemo();
     },
     data() {
         return {
@@ -67,31 +67,6 @@ export default {
             // 添加渲染器生成的 canvas 到页面的 body 中
             const canvasContainer = document.getElementById(containerId);
             canvasContainer.appendChild(renderer.domElement);
-
-            // 光 - 环境光使物体整体可见
-            var light = new THREE.AmbientLight(0xffffff, 0.8); // soft white light
-            scene.add(light);
-            // 光 - 平行光展示阴影
-            var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLight.position.set(2, 5, 5);
-            directionalLight.castShadow = true;
-            directionalLight.shadowDarkness = 0.3;
-            scene.add(directionalLight);
-            // 背面光
-            var backDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
-            backDirectionalLight.position.set(0, 0, -50);
-            // 光照开启阴影
-            backDirectionalLight.castShadow = true;
-            scene.add(backDirectionalLight);
-
-            // 放一个球模拟平行光源
-            var sphereMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffffff
-            });
-            const sphereGeometry = new THREE.SphereGeometry(0.1, 5, 5);
-            var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            sphere.position.set(2, 5, 5);
-            scene.add(sphere);
 
             return {
                 scene,
@@ -179,75 +154,30 @@ export default {
         },
 
         /**
-         * 运行 Demo A: 手动设置航拍轨迹
+         * 运行 Demo: 手动设置航拍轨迹
          */
-        runDemoA() {
+        runDemo() {
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
             this.addHelperLine(scene);
 
-            // 平面一
-            var planeGeometry = new THREE.PlaneGeometry(5, 3, 50);
-            var planeMaterial = new THREE.MeshStandardMaterial({
-                color: 0xc4c4c4,
-                side: THREE.DoubleSide
+            const points = [
+                new THREE.Vector3(1, 2, 1),
+                new THREE.Vector3(1, 0, 1),
+                new THREE.Vector3(2, 0, 1),
+                new THREE.Vector3(1, 2, 1)
+            ];
+            const geometry = new THREE.Geometry().setFromPoints(points);
+
+            const material = new THREE.LineBasicMaterial({
+                // 白色
+                color: 0xfffffff
             });
-            var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-            plane.position.set(0, 0, 0);
-            plane.receiveShadow = true;
-            
-            scene.add(plane);
-
-            // 平面二
-            var planeGeometry2 = new THREE.PlaneGeometry(2.5, 1.5, 50);
-            var planeMaterial2 = new THREE.MeshStandardMaterial({
-                color: 0x4169E1,
-                opacity: 0.4
-            });
-            var plane2 = new THREE.Mesh(planeGeometry2, planeMaterial2);
-            plane2.position.set(0, 0, 0);
-            plane2.castShadow = true;
-            plane2.receiveShadow = true;
-            // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
-            plane2.material.side = THREE.DoubleSide;
-            plane2.lookAt(0, 1, 0);
-            scene.add(plane2);
-
-            // 平面三
-            var planeGeometry3 = new THREE.PlaneGeometry(2.5, 1.5, 50);
-            var planeMaterial3 = new THREE.MeshStandardMaterial({
-                color: 0x4169E1,
-                side: THREE.DoubleSide,
-                // 透明度设置
-                transparent: true,
-                opacity: 0.8
-            });
-            var plane3 = new THREE.Mesh(planeGeometry3, planeMaterial3);
-            plane3.position.set(1.25, 0, 0);
-            plane3.castShadow = true;
-            // 无厚度平面默认是单向的，背面不可见，双向可见需要配置开启
-            plane3.material.side = THREE.DoubleSide;
-            plane3.lookAt(0, 0, 0);
-            scene.add(plane3);
-
-            // 平面四
-            var plane4 = new THREE.Mesh(planeGeometry3, planeMaterial3);
-            plane4.position.set(-1.25, 0, 0);
-            plane4.castShadow = true;
-            plane4.receiveShadow = true;
-            plane4.lookAt(0, 0, 0);
-            scene.add(plane4);
-
+            const line = new THREE.Line(geometry, material);
+            scene.add(line);
 
             this.render(scene, renderer, camera);
         }
     }
 };
 </script>
-
-<style lang="less" scope>
-@import '../assets/base.less';
-.demo-02 {
-    
-}
-</style>

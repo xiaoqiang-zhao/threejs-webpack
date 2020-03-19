@@ -31,6 +31,12 @@ export default new Router({
             name: 'demo-02',
             component: () => import('@/pages/demo-02')
         },
+        // 线
+        {
+            path: '/demo-03',
+            name: 'demo-03',
+            component: () => import('@/pages/demo-03')
+        },
         // 平面
         {
             path: '/demo-04',

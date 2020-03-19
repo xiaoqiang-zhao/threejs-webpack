@@ -1,5 +1,5 @@
 <template>
-    <div class="demo-02 markdown">
+    <div class="demo-04 markdown">
         <markdown-doc-content :mdContent="mdContent"/>
         <div id="demo-canvas-container"></div>
         <markdown-doc-content :mdContent="demoCodeMdContent"/>
@@ -244,10 +244,3 @@ export default {
     }
 };
 </script>
-
-<style lang="less" scope>
-@import '../assets/base.less';
-.demo-02 {
-    
-}
-</style>

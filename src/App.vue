@@ -54,8 +54,13 @@ export default {
                     level: 2
                 },
                 {
+                    name: 'demo-03',
+                    text: '线(Line)',
+                    level: 2
+                },
+                {
                     name: 'demo-04',
-                    text: '平面(PlaneGeometry)',
+                    text: '面(PlaneGeometry)',
                     level: 2
                 }
             ]
