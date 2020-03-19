@@ -60,7 +60,12 @@ export default {
                 },
                 {
                     name: 'demo-04',
-                    text: '面(PlaneGeometry)',
+                    text: '面(Plane)',
+                    level: 2
+                },
+                {
+                    name: 'demo-05',
+                    text: '文字(Text)',
                     level: 2
                 }
             ]

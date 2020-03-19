@@ -42,6 +42,12 @@ export default new Router({
             path: '/demo-04',
             name: 'demo-04',
             component: () => import('@/pages/demo-04')
+        },
+        // 文字
+        {
+            path: '/demo-05',
+            name: 'demo-05',
+            component: () => import('@/pages/demo-05')
         }
     ]
 });
