@@ -182,9 +182,25 @@ export default {
          * 运行 Demo: 手动设置航拍轨迹
          */
         runDemo() {
+
+            const loader = new THREE.FontLoader();
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
             this.addHelperLine(scene);
+
+            loader.load('/static/NewYork.json', font => {
+                debugger
+                const geometry = new THREE.TextGeometry( 'Hello three.js!', {
+                    font: font,
+                    size: 80,
+                    height: 5,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 10,
+                    bevelSize: 8,
+                    bevelSegments: 5
+                });
+            });
 
             this.render(scene, renderer, camera);
         }
