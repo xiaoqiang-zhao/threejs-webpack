@@ -187,9 +187,19 @@ export default {
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
             this.addHelperLine(scene);
-
-            loader.load('/static/NewYork.json', font => {
-                debugger
+            // this.$http.get('/font/NewYork').then(({data: font}) => {
+            //     const geometry = new THREE.TextGeometry( 'Hello three.js!', {
+            //         font: font,
+            //         size: 80,
+            //         height: 5,
+            //         curveSegments: 12,
+            //         bevelEnabled: true,
+            //         bevelThickness: 10,
+            //         bevelSize: 8,
+            //         bevelSegments: 5
+            //     });
+            // });
+            loader.load('/static/font/NewYork.json', font => {
                 const geometry = new THREE.TextGeometry( 'Hello three.js!', {
                     font: font,
                     size: 80,
