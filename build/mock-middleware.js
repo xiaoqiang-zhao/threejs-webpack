@@ -1,10 +1,3 @@
-/**
- * @file 本地和远程数据模拟模块
- *
- * @author liubin29
- * @date 2018-05-15
- */
-
 let fs = require('fs');
 let path = require('path');
 let mockRoot = path.resolve(__dirname, '../mock/') + '/';

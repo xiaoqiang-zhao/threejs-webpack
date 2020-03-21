@@ -1,10 +1,3 @@
-/**
- * @file 正式版本设置
- *
- * @author vue-cli
- * @date 2018-05-15
- */
-
 'use strict';
 const path = require('path');
 const utils = require('./utils');

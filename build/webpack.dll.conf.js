@@ -1,10 +1,3 @@
-/**
- * @file webpack 打包优化
- *
- * @author haoxl
- * @date 2019-03-03
- */
-
 const path = require('path');
 const webpack = require('webpack');
 
