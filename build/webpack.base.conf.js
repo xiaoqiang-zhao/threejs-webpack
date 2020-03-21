@@ -1,3 +1,10 @@
+/**
+ * @file 基础设置
+ *
+ * @author vue-cli
+ * @date 2018-05-15
+ */
+
 'use strict';
 const path = require('path');
 const utils = require('./utils');
@@ -16,16 +23,21 @@ module.exports = {
     output: {
         path: config.build.assetsRoot,
         filename: '[name].js',
-        publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath
+        publicPath: process.env.NODE_ENV === 'production'
+            ? config.build.assetsPublicPath
+            : config.dev.assetsPublicPath
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            '@': resolve('src')
+            'vue$': 'vue/dist/vue.esm.js',
+            '@': resolve('src'),
+            'aiib-web-components': resolve('aiib-web-components')
         }
     },
     module: {
-        rules: [{
+        rules: [
+            {
                 test: /\.vue$/,
                 loader: 'vue-loader',
                 options: vueLoaderConfig

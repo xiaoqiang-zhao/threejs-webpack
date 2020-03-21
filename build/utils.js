@@ -4,12 +4,12 @@ const config = require('../config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const packageConfig = require('../package.json');
 
-exports.assetsPath = function (pathP) {
+exports.assetsPath = function (dir) {
     const assetsSubDirectory = process.env.NODE_ENV === 'production'
         ? config.build.assetsSubDirectory
         : config.dev.assetsSubDirectory;
 
-    return path.posix.join(assetsSubDirectory, pathP);
+    return path.posix.join(assetsSubDirectory, dir);
 };
 
 exports.cssLoaders = function (options) {
@@ -49,7 +49,8 @@ exports.cssLoaders = function (options) {
                 use: loaders,
                 fallback: 'vue-style-loader'
             });
-        } else {
+        }
+        else {
             return ['vue-style-loader'].concat(loaders);
         }
     }
@@ -99,7 +100,7 @@ exports.createNotifierCallback = () => {
             title: packageConfig.name,
             message: severity + ': ' + error.name,
             subtitle: filename || '',
-            icon: path.join(__dirname, 'favicon.ico')
+            icon: path.join(__dirname, '/assets/img/logo.png')
         });
     };
 };
