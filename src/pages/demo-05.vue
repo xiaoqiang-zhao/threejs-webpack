@@ -14,6 +14,8 @@ import markdownDocContent from '@/components/markdown-doc-content.vue';
 import baseMdContent from './demo-05.md';
 import demoCodeMdContent from './demo-05-code.md';
 
+const loader = new THREE.FontLoader();
+
 export default {
     components: {
         markdownDocContent
@@ -101,51 +103,98 @@ export default {
         },
 
         /**
+         * 添加从原点出发的线
+         * 
+         * @param {Object} scene 场景对象
+         * @param {Array} vector 第二坐标点(原点是第一坐标点)
+         * @param {number} color 16进制颜色值
+         */
+        addLine(scene, vector, color) {
+            // 添加线
+            const linePoints = [];
+			linePoints.push(new THREE.Vector3(0, 0, 0));
+			linePoints.push(new THREE.Vector3(...vector));
+			const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePoints);
+
+			const lineMaterial = new THREE.LineBasicMaterial({
+				color
+			});
+			const line = new THREE.Line(lineGeometry, lineMaterial);
+            scene.add(line);
+            
+            // 添加箭头
+            // 半径，高度，分段数
+            const geometry = new THREE.ConeGeometry(0.1, 0.2, 10);
+            const material = new THREE.MeshBasicMaterial({
+                color
+            });
+            const cone = new THREE.Mesh(geometry, material);
+            cone.position.set(...vector);
+            let [x, y, z] = vector;
+            let text = 'y';
+            if (x !== 0) {
+                cone.rotateZ(-Math.PI / 2);
+                text = 'x'
+            }
+            if (z !== 0) {
+                cone.rotateX(Math.PI / 2);
+                text = 'z';
+            }
+            scene.add(cone);
+
+            // 添加文字
+            loader.load('/static/font/NewYork.json', font => {
+                const geometry = new THREE.TextGeometry(text, {
+                    font: font,
+                    size: 0.3,
+                    height: 0.01, // 文字厚度
+                    curveSegments: 12, // 弧线分段数，使得文字的曲线更加光滑
+                    bevelEnabled: true,
+                    bevelThickness: 0.01, // 倒角厚度
+                    bevelSize: 0.01, // 倒角宽度
+                    bevelSegments: 5 // 弧线分段数，使得文字的曲线更加光滑
+                });
+                geometry.computeBoundingBox();
+                geometry.computeVertexNormals();
+
+                const material = new THREE.MultiMaterial([
+                    // front
+                    new THREE.MeshPhongMaterial({
+                        color,
+                        shading: THREE.FlatShading
+                    }),
+                    // side
+                    new THREE.MeshPhongMaterial({
+                        color,
+                        shading: THREE.SmoothShading
+                    })
+                ]);
+
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(x, y + 0.3, z);
+                scene.add(mesh);
+            });
+        },
+
+        /**
          * 添加坐标辅助线
          * 
          * @param {Object} scene 场景对象
          */
         addHelperLine(scene) {
-            // --- 辅助轴
-			// x 轴
-			var pointsX = [];
-			pointsX.push( new THREE.Vector3(0, 0, 0));
-			pointsX.push( new THREE.Vector3(10, 0, 0));
-			var geometryX = new THREE.BufferGeometry().setFromPoints(pointsX);
+            // x 轴 红色
+            this.addLine(scene, [10, 0, 0], 0xFF0000);
 
-			var materialX = new THREE.LineBasicMaterial({
-                // 红色
-				color: 0xFF0000
-			});
-			var lineX = new THREE.Line(geometryX, materialX);
-			scene.add(lineX);
+            // y 轴  绿色
+            this.addLine(scene, [0, 10, 0], 0x00FF00);
+			
+            // z 轴 蓝色
+            this.addLine(scene, [0, 0, 10], 0x0000FF);
 
-			// y 轴
-			var pointsY = [];
-			pointsY.push( new THREE.Vector3(0, 0, 0));
-			pointsY.push( new THREE.Vector3(0, 10, 0));
-			var geometryY = new THREE.BufferGeometry().setFromPoints(pointsY);
-
-			var materialY = new THREE.LineBasicMaterial({
-                // 绿色
-				color: 0x00FF00
-			});
-			var lineY = new THREE.Line(geometryY, materialY);
-			scene.add(lineY);
-
-			// z 轴
-			var pointsZ = [];
-			pointsZ.push( new THREE.Vector3(0, 0, 0));
-			pointsZ.push( new THREE.Vector3(0, 0, 10));
-			var geometryZ = new THREE.BufferGeometry().setFromPoints(pointsZ);
-
-			var materialZ = new THREE.LineBasicMaterial({
-                // 蓝色
-				color: 0x0000FF
-			});
-			var lineZ = new THREE.Line(geometryZ, materialZ);
-			scene.add(lineZ);
-			// ---
+            const geometry = new THREE.ConeGeometry(1, 2, 10);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0x00FF00
+            });
         },
 
         /**
@@ -182,37 +231,42 @@ export default {
          * 运行 Demo: 手动设置航拍轨迹
          */
         runDemo() {
-
-            const loader = new THREE.FontLoader();
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
             this.addHelperLine(scene);
-            // this.$http.get('/font/NewYork').then(({data: font}) => {
-            //     const geometry = new THREE.TextGeometry( 'Hello three.js!', {
-            //         font: font,
-            //         size: 80,
-            //         height: 5,
-            //         curveSegments: 12,
-            //         bevelEnabled: true,
-            //         bevelThickness: 10,
-            //         bevelSize: 8,
-            //         bevelSegments: 5
-            //     });
-            // });
-            loader.load('/static/font/NewYork.json', font => {
-                const geometry = new THREE.TextGeometry( 'Hello three.js!', {
-                    font: font,
-                    size: 80,
-                    height: 5,
-                    curveSegments: 12,
-                    bevelEnabled: true,
-                    bevelThickness: 10,
-                    bevelSize: 8,
-                    bevelSegments: 5
-                });
-            });
 
-            this.render(scene, renderer, camera);
+            loader.load('/static/font/NewYork.json', font => {
+                const geometry = new THREE.TextGeometry('Hello three.js!', {
+                    font: font,
+                    size: 1,
+                    height: 0.1, // 文字厚度
+                    curveSegments: 12, // 弧线分段数，使得文字的曲线更加光滑
+                    bevelEnabled: true,
+                    bevelThickness: 0.1, // 倒角厚度
+                    bevelSize: 0.1, // 倒角宽度
+                    bevelSegments: 5 // 弧线分段数，使得文字的曲线更加光滑
+                });
+                geometry.computeBoundingBox();
+                geometry.computeVertexNormals();
+
+                const material = new THREE.MultiMaterial([
+                    // front
+                    new THREE.MeshPhongMaterial({
+                        color: 0xffffff,
+                        shading: THREE.FlatShading
+                    }),
+                    // side
+                    new THREE.MeshPhongMaterial({
+                        color: 0xffffff,
+                        shading: THREE.SmoothShading
+                    })
+                ]);
+
+                const mesh = new THREE.Mesh(geometry, material);
+                scene.add(mesh);
+
+                this.render(scene, renderer, camera);
+            });
         }
     }
 };
