@@ -75,7 +75,6 @@ export default {
             var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
             directionalLight.position.set(2, 5, 5);
             directionalLight.castShadow = true;
-            directionalLight.shadowDarkness = 0.3;
             scene.add(directionalLight);
             // 背面光
             var backDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.2);

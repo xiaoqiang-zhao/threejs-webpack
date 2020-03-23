@@ -77,7 +77,6 @@ export default {
             var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
             directionalLight.position.set(2, 5, 5);
             directionalLight.castShadow = true;
-            directionalLight.shadowDarkness = 0.3;
             scene.add(directionalLight);
             // 背面光
             var backDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
@@ -87,13 +86,13 @@ export default {
             scene.add(backDirectionalLight);
 
             // 放一个球模拟平行光源
-            var sphereMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffffff
-            });
-            const sphereGeometry = new THREE.SphereGeometry(0.1, 5, 5);
-            var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            sphere.position.set(2, 5, 5);
-            scene.add(sphere);
+            // var sphereMaterial = new THREE.MeshStandardMaterial({
+            //     color: 0xffffff
+            // });
+            // const sphereGeometry = new THREE.SphereGeometry(0.1, 5, 5);
+            // var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            // sphere.position.set(2, 5, 5);
+            // scene.add(sphere);
 
             return {
                 scene,
@@ -157,18 +156,9 @@ export default {
                 geometry.computeBoundingBox();
                 geometry.computeVertexNormals();
 
-                const material = new THREE.MultiMaterial([
-                    // front
-                    new THREE.MeshPhongMaterial({
-                        color,
-                        shading: THREE.FlatShading
-                    }),
-                    // side
-                    new THREE.MeshPhongMaterial({
-                        color,
-                        shading: THREE.SmoothShading
-                    })
-                ]);
+                const material = [new THREE.MeshPhongMaterial({
+                    color
+                })];
 
                 const mesh = new THREE.Mesh(geometry, material);
                 mesh.position.set(x, y + 0.3, z);
@@ -249,18 +239,16 @@ export default {
                 geometry.computeBoundingBox();
                 geometry.computeVertexNormals();
 
-                const material = new THREE.MultiMaterial([
-                    // front
-                    new THREE.MeshPhongMaterial({
-                        color: 0xffffff,
-                        shading: THREE.FlatShading
+                const material = [
+                    // 内部字体
+                    new THREE.MeshStandardMaterial({
+                        color: 0x4169E1
                     }),
-                    // side
-                    new THREE.MeshPhongMaterial({
-                        color: 0xffffff,
-                        shading: THREE.SmoothShading
+                    // 外部描边
+                    new THREE.MeshStandardMaterial({
+                        color: 0xffffff
                     })
-                ]);
+                ];
 
                 const mesh = new THREE.Mesh(geometry, material);
                 scene.add(mesh);
