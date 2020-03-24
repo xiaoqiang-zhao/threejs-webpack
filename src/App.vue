@@ -65,6 +65,11 @@ export default {
                 },
                 {
                     name: 'demo-05',
+                    text: '体(ConeGeometry)',
+                    level: 2
+                },
+                {
+                    name: 'demo-06',
                     text: '文字(Text)',
                     level: 2
                 }

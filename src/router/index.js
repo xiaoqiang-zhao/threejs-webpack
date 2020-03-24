@@ -43,11 +43,17 @@ export default new Router({
             name: 'demo-04',
             component: () => import('@/pages/demo-04')
         },
-        // 文字
+        // 体
         {
             path: '/demo-05',
             name: 'demo-05',
             component: () => import('@/pages/demo-05')
+        },
+        // 文字
+        {
+            path: '/demo-06',
+            name: 'demo-06',
+            component: () => import('@/pages/demo-06')
         }
     ]
 });
