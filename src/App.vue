@@ -72,6 +72,11 @@ export default {
                     name: 'demo-06',
                     text: '文字(Text)',
                     level: 2
+                },
+                {
+                    name: 'demo-10',
+                    text: '时间线(TimeLine)',
+                    level: 2
                 }
             ]
         };

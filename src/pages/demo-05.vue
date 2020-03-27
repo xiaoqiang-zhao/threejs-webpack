@@ -3,6 +3,7 @@
         <markdown-doc-content :mdContent="mdContent"/>
         <div id="demo-canvas-container"></div>
         <markdown-doc-content :mdContent="demoCodeMdContent"/>
+        <div id="rotate-demo-canvas-container"></div>
     </div>
 </template>
 
@@ -22,6 +23,7 @@ export default {
     },
     mounted() {
         this.runDemo();
+        this.runRotateDemo();
     },
     data() {
         return {
@@ -177,7 +179,6 @@ export default {
          * 运行 Demo: 手动设置航拍轨迹
          */
         runDemo() {
-            
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
             this.addHelperLine(scene);
 
@@ -195,9 +196,11 @@ export default {
                 [0, -1, 0],
                 [0, 0, -1]
             ];
+
             arr.forEach(item => {
                 const mesh = new THREE.Mesh(geometry, material);
                 let [x, y, z] = item;
+
                 const space = 3;
                 x *= space;
                 y *= space;
@@ -206,6 +209,55 @@ export default {
                 // 光照阴影
                 mesh.castShadow = true;
                 mesh.receiveShadow = true;
+                scene.add(mesh);
+            });
+
+            this.render(scene, renderer, camera);
+        },
+
+        /**
+         * 运行旋转 Demo
+         */
+        runRotateDemo() {
+            const {scene, renderer, camera} = this.runBase('rotate-demo-canvas-container');
+            this.addHelperLine(scene);
+
+            // 添加圆锥体
+            // 半径，高度，分段数
+            const geometry = new THREE.ConeGeometry(1, 2, 100);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x4169E1
+            });
+            const arr = [
+                // X 轴正方向上的圆锥体，绕 Z 轴方向旋转 -90度，也就是 -0.5 弧度
+                [1, 0, 0, 'Z', -0.5],
+                // Y 轴正方向上的圆锥体，不需要旋转
+                [0, 1, 0, 'Y', 0],
+                // Z 轴正方向上的圆锥体，绕 X 轴方向旋转 90度，也就是 0.5 弧度
+                [0, 0, 1, 'X', 0.5],
+                // X 轴负方向上的圆锥体，绕 Z 轴方向旋转 90度， 0.5 弧度
+                [-1, 0, 0, 'Z', 0.5],
+                // Y 轴负方向上的圆锥体，绕 X 轴方向旋转 180度，也就是 1 弧度
+                [0, -1, 0, 'X', 1],
+                // Z 轴负方向上的圆锥体，绕 X 轴方向旋转 -90度，也就是 -0.5 弧度
+                [0, 0, -1, 'X', -0.5]
+            ];
+            arr.forEach(item => {
+                const mesh = new THREE.Mesh(geometry, material);
+                let [x, y, z, axis, roateValue] = item;
+                const space = 3;
+                x *= space;
+                y *= space;
+                z *= space;
+                mesh.position.set(x, y, z);
+
+                // 光照阴影
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+
+                // 旋转
+                mesh[`rotate${axis}`](Math.PI * roateValue);
+
                 scene.add(mesh);
             });
 
