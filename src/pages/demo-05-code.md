@@ -46,3 +46,7 @@ const arr = [
     [0, 0, -1, 'X', -0.5]
 ];
 ```
+
+## 参考
+
+[几何变换(旋转、缩放、平移)](http://www.yanhuangxueyuan.com/Three.js_course/transformation.html)
