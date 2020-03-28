@@ -46,21 +46,19 @@ export default {
                 background: 0x000000
             });
 
-            // scene.translateY(-19);
-
             // 摄像机
             const space = 208;
             const width = 1232;
             const height = 900;
             var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 300);
             
-            camera.position.set(10, 10, 2037);
+            camera.position.set(10, 10, 25);
             camera.lookAt(0, 0, 0);
 
             // 渲染器
             var renderer = new THREE.WebGLRenderer({
                 // 抗锯齿
-                antialias: true,
+                // antialias: true,
                 // 背景透明，可以看到 canvas 下的东西
                 // alpha: true
             });
@@ -142,14 +140,14 @@ export default {
             // from -= 50;
             while(to > from) {
                 // 半径，高度，分段数
-                const geometry = new THREE.ConeGeometry(0.4, 0.8, 100);
+                const geometry = new THREE.ConeGeometry(0.1, 0.3, 10);
                 const material = new THREE.MeshStandardMaterial({
                     color
                 });
                 const cone = new THREE.Mesh(geometry, material);
                 cone.castShadow = true;
                 cone.receiveShadow = true;
-                cone.position.set(0, 0, from + 5);
+                cone.position.set(0, 0, from);
                 cone.rotateX(Math.PI / 2);
                 this.scene.add(cone);
                 from += this.space;
@@ -176,7 +174,7 @@ export default {
                 ];
 
                 while(to >= from) {
-                    const geometry = new THREE.TextGeometry(from + '', {
+                    const geometry = new THREE.TextGeometry((from + 2000) + '', {
                         font: font,
                         size: 1,
                         height: 0.01, // 文字厚度
@@ -184,7 +182,7 @@ export default {
                         bevelEnabled: true,
                         bevelThickness: 0.08, // 倒角厚度
                         bevelSize: 0.08, // 倒角宽度
-                        bevelSegments: 10 // 弧线分段数，使得文字的曲线更加光滑
+                        bevelSegments: 1 // 弧线分段数，使得文字的曲线更加光滑
                     });
                     geometry.computeBoundingBox();
                     geometry.computeVertexNormals();
@@ -196,10 +194,8 @@ export default {
                     from += this.space;
                 }
 
-                this.render();
+                this.renderer.render(this.scene, this.camera);
             });
-
-            // 长方体
         },
 
         /**
@@ -209,25 +205,11 @@ export default {
             // 控制器
             const Controls = OrbitControls(THREE);
             const controls = new Controls(this.camera, this.renderer.domElement);
-            controls.keys = {
-                LEFT: 37, //left arrow
-                UP: 38, // up arrow
-                RIGHT: 39, // right arrow
-                BOTTOM: 40 // down arrow
-            };
 
-            controls.update();
             this.renderer.render(this.scene, this.camera);
-            // function animate() {
-
-            //     requestAnimationFrame(animate);
-
-            //     // required if controls.enableDamping or controls.autoRotate are set to true
-            //     controls.update();
-            //     // renderer.setClearAlpha(0.0);
-            //     renderer.render(scene, camera);
-            // }
-            // animate();
+            controls.addEventListener('change', (eve) => {
+                this.renderer.render(scene, camera);
+            });
         },
 
         /**
@@ -236,12 +218,11 @@ export default {
         runDemo() {
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
-            const from = 1960;
-            const to = 2020;
+            const from = -40;
+            const to = 20;
 
             this.addLine([0, 0, from], [0, 0, to], 0x0000ff);
             this.addGones(from, to, 0x0000FF);
-            // this.addHelperLine(scene, from, to);
             this.addTimeSton(scene, from, to);
 
             this.render(scene, renderer, camera);
