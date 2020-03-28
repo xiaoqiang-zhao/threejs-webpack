@@ -55,6 +55,12 @@ export default new Router({
             name: 'demo-06',
             component: () => import('@/pages/demo-06')
         },
+        // 用户交互
+        {
+            path: '/demo-07',
+            name: 'demo-07',
+            component: () => import('@/pages/demo-07')
+        },
 
         // --- 综合示例 --- //
         // 时间线

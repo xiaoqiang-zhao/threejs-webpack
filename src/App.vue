@@ -74,6 +74,11 @@ export default {
                     level: 2
                 },
                 {
+                    name: 'demo-07',
+                    text: '交互(Interaction)',
+                    level: 2
+                },
+                {
                     name: 'demo-10',
                     text: '时间线(TimeLine)',
                     level: 2

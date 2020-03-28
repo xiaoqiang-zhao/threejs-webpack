@@ -85,15 +85,6 @@ export default {
             backDirectionalLight.castShadow = true;
             scene.add(backDirectionalLight);
 
-            // 放一个球模拟平行光源
-            // var sphereMaterial = new THREE.MeshStandardMaterial({
-            //     color: 0xffffff
-            // });
-            // const sphereGeometry = new THREE.SphereGeometry(0.1, 5, 5);
-            // var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            // sphere.position.set(2, 5, 5);
-            // scene.add(sphere);
-
             return {
                 scene,
                 renderer,
@@ -204,14 +195,19 @@ export default {
             };
 
             controls.update();
+            // controls.addEventListener('change', (eve) => {
+            //     // console.log(eve);
+            // });
+            renderer.render(scene, camera);
             function animate() {
 
                 requestAnimationFrame(animate);
 
                 // required if controls.enableDamping or controls.autoRotate are set to true
                 controls.update();
+                // console.log('c');
                 // renderer.setClearAlpha(0.0);
-                renderer.render(scene, camera);
+                
             }
             animate();
         },
@@ -223,37 +219,9 @@ export default {
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
             this.addHelperLine(scene);
+            
 
-            loader.load('/static/font/NewYork.json', font => {
-                const geometry = new THREE.TextGeometry('Hello three.js!', {
-                    font: font,
-                    size: 1,
-                    height: 0.1, // 文字厚度
-                    curveSegments: 12, // 弧线分段数，使得文字的曲线更加光滑
-                    bevelEnabled: true,
-                    bevelThickness: 0.1, // 倒角厚度
-                    bevelSize: 0.1, // 倒角宽度
-                    bevelSegments: 5 // 弧线分段数，使得文字的曲线更加光滑
-                });
-                geometry.computeBoundingBox();
-                geometry.computeVertexNormals();
-
-                const material = [
-                    // 内部字体
-                    new THREE.MeshStandardMaterial({
-                        color: 0x4169E1
-                    }),
-                    // 外部描边
-                    new THREE.MeshStandardMaterial({
-                        color: 0xffffff
-                    })
-                ];
-
-                const mesh = new THREE.Mesh(geometry, material);
-                scene.add(mesh);
-
-                this.render(scene, renderer, camera);
-            });
+            this.render(scene, renderer, camera);
         }
     }
 };
