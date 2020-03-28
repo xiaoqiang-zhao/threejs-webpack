@@ -11,8 +11,8 @@ import * as THREE from 'three/build/three.module.js';
 import OrbitControls from 'three-orbit-controls';
 
 import markdownDocContent from '@/components/markdown-doc-content.vue';
-import baseMdContent from './demo-06.md';
-import demoCodeMdContent from './demo-06-code.md';
+import baseMdContent from './demo-07.md';
+import demoCodeMdContent from './demo-07-code.md';
 
 const loader = new THREE.FontLoader();
 
@@ -26,7 +26,9 @@ export default {
     data() {
         return {
             mdContent: baseMdContent,
-            demoCodeMdContent
+            demoCodeMdContent,
+            camera: null,
+            renderer: null
         };
     },
     methods: {
@@ -48,7 +50,7 @@ export default {
             const height = 900;
             var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
             
-            camera.position.set(10, 10, 10);
+            camera.position.set(5, 0, 21);
             camera.lookAt(0, 0, 0);
 
             // 渲染器
@@ -85,6 +87,8 @@ export default {
             backDirectionalLight.castShadow = true;
             scene.add(backDirectionalLight);
 
+            this.camera = camera;
+            this.renderer = renderer;
             return {
                 scene,
                 renderer,
@@ -154,6 +158,7 @@ export default {
                 const mesh = new THREE.Mesh(geometry, material);
                 mesh.position.set(x, y + 0.3, z);
                 scene.add(mesh);
+                this.renderer.render(scene, this.camera);
             });
         },
 
@@ -185,31 +190,13 @@ export default {
             // 控制器
             const Controls = OrbitControls(THREE);
             const controls = new Controls(camera, renderer.domElement);
-            // 自动围绕目标旋转
-            controls.autoRotate = true;
-            controls.keys = {
-                LEFT: 37, //left arrow
-                UP: 38, // up arrow
-                RIGHT: 39, // right arrow
-                BOTTOM: 40 // down arrow
-            };
 
             controls.update();
-            // controls.addEventListener('change', (eve) => {
-            //     // console.log(eve);
-            // });
             renderer.render(scene, camera);
-            function animate() {
 
-                requestAnimationFrame(animate);
-
-                // required if controls.enableDamping or controls.autoRotate are set to true
-                controls.update();
-                // console.log('c');
-                // renderer.setClearAlpha(0.0);
-                
-            }
-            animate();
+            controls.addEventListener('change', (eve) => {
+                renderer.render(scene, camera);
+            });
         },
 
         /**
@@ -219,7 +206,6 @@ export default {
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
             this.addHelperLine(scene);
-            
 
             this.render(scene, renderer, camera);
         }
