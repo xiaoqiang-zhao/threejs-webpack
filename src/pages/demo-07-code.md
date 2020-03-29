@@ -1,5 +1,3 @@
-
-
 核心代码:
 
 ```js
@@ -14,6 +12,6 @@ controls.addEventListener('change', (eve) => {
 });
 ```
 
-## 参考
+## 识别三维世界的图形
 
-[IBM 用户交互: https://www.ibm.com/developerworks/cn/web/wa-webgl3/index.html](https://www.ibm.com/developerworks/cn/web/wa-webgl3/index.html)
+鼠标移动到图形上高亮显示。
