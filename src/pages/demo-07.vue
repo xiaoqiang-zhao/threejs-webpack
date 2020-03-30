@@ -270,13 +270,22 @@ export default {
 
                 // 旋转
                 mesh[`rotate${axis}`](Math.PI * roateValue);
+                mesh.name = item.toString();
 
                 this.group.add(mesh);
             });
 
-            window.addEventListener('mousemove', this.onDocumentMouseMove, false);
+            const dom = document.getElementById('demo-b-canvas-container');
+            dom.addEventListener('mousemove', this.onDocumentMouseMove, false);
+            dom.addEventListener('click', this.onClick);
 
             this.render(scene, camera, renderer);
+        },
+
+        onClick() {
+            if (this.selectedObject) {
+                alert('点击事件监听，selectedObject.name: ' + this.selectedObject.name);
+            }
         },
 
         onDocumentMouseMove(event) {
