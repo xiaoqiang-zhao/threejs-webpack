@@ -14,4 +14,4 @@ controls.addEventListener('change', (eve) => {
 
 ## 识别三维世界的图形
 
-鼠标移动到图形上高亮显示。
+鼠标移动到图形上高亮显示，响应点击事件。

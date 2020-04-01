@@ -82,11 +82,12 @@ export default {
             canvasContainer.appendChild(renderer.domElement);
 
             // 光 - 环境光使物体整体可见
-            var light = new THREE.AmbientLight(0xffffff, 0.8); // soft white light
+            const light = new THREE.AmbientLight(0xffffff, 0.8); // soft white light
             scene.add(light);
             // 光 - 平行光展示阴影
-            var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
             directionalLight.position.set(2, 5, 5);
+            // 指定此光源会产生投影
             directionalLight.castShadow = true;
             scene.add(directionalLight);
             // 背面光
