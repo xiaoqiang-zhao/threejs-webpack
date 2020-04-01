@@ -68,6 +68,12 @@ export default new Router({
             path: '/demo-10',
             name: 'demo-10',
             component: () => import('@/pages/demo-10')
+        },
+        // 纹理贴图
+        {
+            path: '/demo-11',
+            name: 'demo-11',
+            component: () => import('@/pages/demo-11')
         }
     ]
 });

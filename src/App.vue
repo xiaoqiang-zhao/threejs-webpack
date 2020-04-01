@@ -82,6 +82,11 @@ export default {
                     name: 'demo-10',
                     text: '时间线(TimeLine)',
                     level: 2
+                },
+                {
+                    name: 'demo-11',
+                    text: '纹理贴图(Texture)',
+                    level: 2
                 }
             ]
         };
