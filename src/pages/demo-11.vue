@@ -79,7 +79,7 @@ export default {
             scene.add(light);
             // 光 - 平行光展示阴影
             var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLight.position.set(10, 10, 2030);
+            directionalLight.position.set(10, 10, 30);
             directionalLight.castShadow = true;
             scene.add(directionalLight);
             // 背面光
@@ -127,23 +127,25 @@ export default {
         runDemo() {
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
-            const geometry = new THREE.CubeGeometry(10, 14, 10);
+            const geometry = new THREE.CubeGeometry(10, 14, 0.1);
 
             //添加贴图
             const materials = [];
             for (var i = 1; i < 7; ++i) {
-                var img = require('../assets/img/Maria-Montessori.jpg');
+                const img = new THREE.TextureLoader().load('/static/img/Maria-Montessori.jpg');
                 materials.push(
                     new THREE.MeshPhongMaterial({
-                        // map: THREE.TextureLoader('../assets/img/Maria-Montessori.jpg')
-                        map: THREE.ImageUtils.loadTexture(img)
+                        map: img
                     })
                 );
             }
-            const meshFaceMaterial = new THREE.MeshFaceMaterial(materials);
-            const box = new THREE.Mesh(geometry, meshFaceMaterial);
+            // const meshFaceMaterial = new THREE.MeshFaceMaterial(materials);
+            const box = new THREE.Mesh(geometry, materials);
             scene.add(box);
 
+            setTimeout(() => {
+                this.render(scene, renderer, camera);
+            }, 100);
             this.render(scene, renderer, camera);
         }
     }
