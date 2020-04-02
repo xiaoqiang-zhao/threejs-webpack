@@ -79,7 +79,7 @@ export default {
             scene.add(light);
             // 光 - 平行光展示阴影
             var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            directionalLight.position.set(10, 10, 30);
+            directionalLight.position.set(10, 10, 20);
             directionalLight.castShadow = true;
             scene.add(directionalLight);
             // 背面光
@@ -90,13 +90,13 @@ export default {
             scene.add(backDirectionalLight);
 
             // 放一个球模拟平行光源
-            // var sphereMaterial = new THREE.MeshStandardMaterial({
-            //     color: 0xffffff
-            // });
-            // const sphereGeometry = new THREE.SphereGeometry(0.1, 5, 5);
-            // var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            // sphere.position.set(2, 5, 5);
-            // scene.add(sphere);
+            var sphereMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffffff
+            });
+            const sphereGeometry = new THREE.SphereGeometry(0.1, 5, 5);
+            var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.position.set(10, 10, 20);
+            scene.add(sphere);
             this.scene = scene;
             this.renderer = renderer;
             this.camera = camera;
@@ -127,25 +127,57 @@ export default {
         runDemo() {
             
             const {scene, renderer, camera} = this.runBase('demo-canvas-container');
-            const geometry = new THREE.CubeGeometry(10, 14, 0.1);
+            const geometry = new THREE.CubeGeometry(10, 14, 1);
 
             //添加贴图
+            const img = new THREE.TextureLoader().load('/static/img/Maria-Montessori.jpg');
+            const phongMaterial = new THREE.MeshPhongMaterial({
+                color: 0x4169E1,
+                map: img
+            });
             const materials = [];
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x4169E1
+            });
+
             for (var i = 1; i < 7; ++i) {
-                const img = new THREE.TextureLoader().load('/static/img/Maria-Montessori.jpg');
-                materials.push(
-                    new THREE.MeshPhongMaterial({
-                        map: img
-                    })
-                );
+                materials.push(material);
             }
+            // 朝向光源的一面设置照片
+            materials[4] = phongMaterial;
             // const meshFaceMaterial = new THREE.MeshFaceMaterial(materials);
             const box = new THREE.Mesh(geometry, materials);
             scene.add(box);
 
-            setTimeout(() => {
+            // 添加文字
+            loader.load('/static/font/NewYork.json', font => {
+                const geometry = new THREE.TextGeometry('Maria Montessori', {
+                    font: font,
+                    size: 0.5,
+                    height: 0.1, // 文字厚度
+                    curveSegments: 12, // 弧线分段数，使得文字的曲线更加光滑
+                    bevelEnabled: true,
+                    bevelThickness: 0.1, // 倒角厚度
+                    bevelSize: 0.1, // 倒角宽度
+                    bevelSegments: 5 // 弧线分段数，使得文字的曲线更加光滑
+                });
+                geometry.computeBoundingBox();
+                geometry.computeVertexNormals();
+
+                const material = [
+                    // 外部描边
+                    new THREE.MeshStandardMaterial({
+                        color: 0xffffff
+                    })
+                ];
+
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(-2.5, -7, 0.5);
+                scene.add(mesh);
+
                 this.render(scene, renderer, camera);
-            }, 100);
+            });
+
             this.render(scene, renderer, camera);
         }
     }
