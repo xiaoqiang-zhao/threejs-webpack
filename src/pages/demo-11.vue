@@ -113,12 +113,20 @@ export default {
         render(scene, renderer, camera) {
             // 控制器
             const Controls = OrbitControls(THREE);
-            const controls = new Controls(this.camera, this.renderer.domElement);
+            const controls = new Controls(camera, renderer.domElement);
+            // 自动围绕目标旋转
+            controls.autoRotate = true;
 
-            this.renderer.render(this.scene, this.camera);
-            controls.addEventListener('change', (eve) => {
-                this.renderer.render(scene, camera);
-            });
+            this.renderer.render(scene, camera);
+            // controls.addEventListener('change', (eve) => {
+            //     this.renderer.render(scene, camera);
+            // });
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
         },
 
         /**
@@ -145,7 +153,6 @@ export default {
             }
             // 朝向光源的一面设置照片
             materials[4] = phongMaterial;
-            // const meshFaceMaterial = new THREE.MeshFaceMaterial(materials);
             const box = new THREE.Mesh(geometry, materials);
             scene.add(box);
 
@@ -157,9 +164,9 @@ export default {
                     height: 0.1, // 文字厚度
                     curveSegments: 12, // 弧线分段数，使得文字的曲线更加光滑
                     bevelEnabled: true,
-                    bevelThickness: 0.1, // 倒角厚度
-                    bevelSize: 0.1, // 倒角宽度
-                    bevelSegments: 5 // 弧线分段数，使得文字的曲线更加光滑
+                    bevelThickness: 0, // 倒角厚度
+                    bevelSize: 0, // 倒角宽度
+                    bevelSegments: 10 // 弧线分段数，使得文字的曲线更加光滑
                 });
                 geometry.computeBoundingBox();
                 geometry.computeVertexNormals();
@@ -174,8 +181,6 @@ export default {
                 const mesh = new THREE.Mesh(geometry, material);
                 mesh.position.set(-2.5, -7, 0.5);
                 scene.add(mesh);
-
-                this.render(scene, renderer, camera);
             });
 
             this.render(scene, renderer, camera);
