@@ -74,6 +74,12 @@ export default new Router({
             path: '/demo-11',
             name: 'demo-11',
             component: () => import('@/pages/demo-11')
+        },
+        // canvas 加载文字和图片
+        {
+            path: '/demo-12',
+            name: 'demo-12',
+            component: () => import('@/pages/demo-12')
         }
     ]
 });
