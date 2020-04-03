@@ -80,6 +80,12 @@ export default new Router({
             path: '/demo-12',
             name: 'demo-12',
             component: () => import('@/pages/demo-12')
+        },
+        // 贴图和文字性能优化
+        {
+            path: '/demo-13',
+            name: 'demo-13',
+            component: () => import('@/pages/demo-13')
         }
     ]
 });

@@ -92,6 +92,11 @@ export default {
                     name: 'demo-12',
                     text: 'canvas 加载图文',
                     level: 2
+                },
+                {
+                    name: 'demo-13',
+                    text: '贴图和文字性能优化',
+                    level: 2
                 }
             ]
         };
