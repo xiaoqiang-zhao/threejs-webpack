@@ -5,8 +5,11 @@
             <img src="/static/img/Maria-Montessori.jpg" alt="图片"/>
             <div>玛利亚-蒙台梭利</div>
         </div>
-        <div id="demo2-canvas-container"></div>
-        <div class="img-text-container" id="demo2-img-container"></div>
+        <p>然后将 html 中的内容和样式输入进 canvas 中。注意要滚动到页面顶部，否则有可能阮然不完整</p>
+        <div id="temp-canvas-container"></div>
+        <p>再将 canvas 作为图片输出到下面。</p>
+        <div class="img-text-container" id="img-container"></div>
+        <p>最后将图片作为贴图输入到 3D 场景中。</p>
         <div id="demo-canvas-container"></div>
         <markdown-doc-content :mdContent="demoCodeMdContent"/>
     </div>
@@ -150,13 +153,13 @@ export default {
             imgTextContainerDom.firstElementChild.onload = function() {
                 // 放入 dom
                 html2canvas(imgTextContainerDom).then(canvas => {
-                    document.getElementById('demo2-canvas-container').appendChild(canvas);
+                    document.getElementById('temp-canvas-container').appendChild(canvas);
 
                     const img = canvas.toDataURL("image/png");
-                    const demo2ImgContainer = document.getElementById('demo2-img-container');
+                    const imgContainer = document.getElementById('img-container');
                     const imgDom = document.createElement('img');
                     imgDom.src = img;
-                    demo2ImgContainer.appendChild(imgDom);
+                    imgContainer.appendChild(imgDom);
 
                     const TextureImg = new THREE.TextureLoader().load(img);
                     const phongMaterial = new THREE.MeshPhongMaterial({
