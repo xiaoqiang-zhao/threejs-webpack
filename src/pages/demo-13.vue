@@ -148,41 +148,35 @@ export default {
             const imgTextContainerDom = document.getElementById('img-text-container');
             
             imgTextContainerDom.firstElementChild.onload = function() {
-                setTimeout(() => {
-                    // 放入 dom
-                    html2canvas(imgTextContainerDom).then(canvas => {
-                        document.getElementById('demo2-canvas-container').appendChild(canvas);
+                // 放入 dom
+                html2canvas(imgTextContainerDom).then(canvas => {
+                    document.getElementById('demo2-canvas-container').appendChild(canvas);
 
-                        const img = canvas.toDataURL("image/png");
-                        const demo2ImgContainer = document.getElementById('demo2-img-container');
-                        const imgDom = document.createElement('img');
-                        imgDom.src = img;
-                        demo2ImgContainer.appendChild(imgDom);
+                    const img = canvas.toDataURL("image/png");
+                    const demo2ImgContainer = document.getElementById('demo2-img-container');
+                    const imgDom = document.createElement('img');
+                    imgDom.src = img;
+                    demo2ImgContainer.appendChild(imgDom);
 
-                        setTimeout(() => {
-                            const img2 = new THREE.TextureLoader().load(img);
-                            const phongMaterial = new THREE.MeshPhongMaterial({
-                                color: 0x4169E1,
-                                map: img2
-                            });
-                            const materials = [];
-                            const material = new THREE.MeshStandardMaterial({
-                                color: 0x4169E1
-                            });
-
-                            for (var i = 1; i < 7; ++i) {
-                                materials.push(material);
-                            }
-                            // 朝向光源的一面设置照片
-                            materials[4] = phongMaterial;
-                            const box = new THREE.Mesh(geometry, materials);
-                            scene.add(box);
-                        }, 1000);
+                    const TextureImg = new THREE.TextureLoader().load(img);
+                    const phongMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x4169E1,
+                        map: TextureImg
                     });
-                }, 2000);
-                
+                    const materials = [];
+                    const material = new THREE.MeshStandardMaterial({
+                        color: 0x4169E1
+                    });
+
+                    for (var i = 1; i < 7; ++i) {
+                        materials.push(material);
+                    }
+                    // 朝向光源的一面设置照片
+                    materials[4] = phongMaterial;
+                    const box = new THREE.Mesh(geometry, materials);
+                    scene.add(box);
+                });
             }
-            // const img = new THREE.TextureLoader().load('/static/img/Maria-Montessori.jpg');
             this.render(scene, renderer, camera);
         }
     }
