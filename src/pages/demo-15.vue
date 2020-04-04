@@ -1,6 +1,6 @@
 <template>
-    <div class="demo-13 markdown">
-        <markdown-doc-content :mdContent="mdContent"/>
+    <div class="demo-15 markdown" id="demo-canvas-container">
+        <!-- <markdown-doc-content :mdContent="mdContent"/>
         <div class="img-text-container" id="img-text-container">
             <img src="/static/img/Maria-Montessori.jpg" alt="图片"/>
             <div>玛利亚-蒙台梭利</div>
@@ -10,8 +10,7 @@
         <p>再将 canvas 作为图片输出到下面。</p>
         <div class="img-text-container" id="img-container"></div>
         <p>最后将图片作为贴图输入到 3D 场景中。</p>
-        <div id="demo-canvas-container"></div>
-        <!-- <markdown-doc-content :mdContent="demoCodeMdContent"/> -->
+        <div id="demo-canvas-container"></div> -->
     </div>
 </template>
 
@@ -36,11 +35,7 @@ export default {
     data() {
         return {
             mdContent: baseMdContent,
-            demoCodeMdContent,
-            scene: null,
-            renderer: null,
-            camera: null,
-            space: 10
+            demoCodeMdContent
         };
     },
     methods: {
@@ -58,8 +53,8 @@ export default {
 
             // 摄像机
             const space = 208;
-            const width = 1232;
-            const height = 900;
+            const width = window.innerWidth - 30;
+            const height = window.innerHeight - 30;
             var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 300);
             
             camera.position.set(10, 10, 25);
@@ -68,11 +63,10 @@ export default {
             // 渲染器
             var renderer = new THREE.WebGLRenderer({
                 // 抗锯齿
-                // antialias: true,
+                antialias: true,
                 // 背景透明，可以看到 canvas 下的东西
                 // alpha: true
             });
-            renderer.setSize(window.innerWidth, window.innerHeight);
             // 开启阴影计算
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -148,44 +142,51 @@ export default {
             const geometry = new THREE.CubeGeometry(10, 14, 1);
 
             //添加贴图
-            const imgTextContainerDom = document.getElementById('img-text-container');
+            // const imgTextContainerDom = document.getElementById('img-text-container');
             
-            imgTextContainerDom.firstElementChild.onload = function() {
-                // 放入 dom
-                html2canvas(imgTextContainerDom).then(canvas => {
-                    document.getElementById('temp-canvas-container').appendChild(canvas);
+            // imgTextContainerDom.firstElementChild.onload = function() {
+            //     // 放入 dom
+            //     html2canvas(imgTextContainerDom).then(canvas => {
+            //         document.getElementById('temp-canvas-container').appendChild(canvas);
 
-                    const img = canvas.toDataURL("image/png");
-                    const imgContainer = document.getElementById('img-container');
-                    const imgDom = document.createElement('img');
-                    imgDom.src = img;
-                    imgContainer.appendChild(imgDom);
+            //         const img = canvas.toDataURL("image/png");
+            //         const imgContainer = document.getElementById('img-container');
+            //         const imgDom = document.createElement('img');
+            //         imgDom.src = img;
+            //         imgContainer.appendChild(imgDom);
 
-                    const TextureImg = new THREE.TextureLoader().load(img);
-                    const phongMaterial = new THREE.MeshPhongMaterial({
-                        color: 0x4169E1,
-                        map: TextureImg
-                    });
-                    const materials = [];
-                    const material = new THREE.MeshStandardMaterial({
-                        color: 0x4169E1
-                    });
+            //         const TextureImg = new THREE.TextureLoader().load(img);
+            //         const phongMaterial = new THREE.MeshPhongMaterial({
+            //             color: 0x4169E1,
+            //             map: TextureImg
+            //         });
+            //         const materials = [];
+            //         const material = new THREE.MeshStandardMaterial({
+            //             color: 0x4169E1
+            //         });
 
-                    for (var i = 1; i < 7; ++i) {
-                        materials.push(material);
-                    }
-                    // 朝向光源的一面设置照片
-                    materials[4] = phongMaterial;
-                    const box = new THREE.Mesh(geometry, materials);
-                    scene.add(box);
-                });
-            }
-            this.render(scene, renderer, camera);
+            //         for (var i = 1; i < 7; ++i) {
+            //             materials.push(material);
+            //         }
+            //         // 朝向光源的一面设置照片
+            //         materials[4] = phongMaterial;
+            //         const box = new THREE.Mesh(geometry, materials);
+            //         scene.add(box);
+            //     });
+            // }
+            // this.render(scene, renderer, camera);
         }
     }
 };
 </script>
-<style lang="less" scoped>
+<style lang="less">
+.demo-15 {
+    position: relative;
+    margin: 15px;
+    > canvas {
+        display: block;
+    }
+}
 .img-text-container {
     position: relative;
     display: inline-block;

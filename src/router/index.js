@@ -86,6 +86,12 @@ export default new Router({
             path: '/demo-13',
             name: 'demo-13',
             component: () => import('@/pages/demo-13')
+        },
+        // 全屏性能测试
+        {
+            path: '/demo-15',
+            name: 'demo-15',
+            component: () => import('@/pages/demo-15')
         }
     ]
 });

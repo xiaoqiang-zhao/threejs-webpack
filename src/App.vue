@@ -1,5 +1,5 @@
 <template>
-    <div class="xiaoqiangzhao-app">
+    <div class="xiaoqiangzhao-app" v-if="!isSinglePage">
         <section>
             <nav>
                 <router-link
@@ -13,10 +13,14 @@
                     }">
                     {{item.text}}
                 </router-link>
+                <a href="/pages/demo-15?isSinglePage=true" target="blank" class="level-2">
+                    全屏性能测试
+                </a>
             </nav>
             <router-view class="content content-section"/>
         </section>
     </div>
+    <router-view v-else class="content content-section"/>
 </template>
 
 <script>
@@ -97,8 +101,14 @@ export default {
                     name: 'demo-13',
                     text: '贴图和文字性能优化',
                     level: 2
-                }
-            ]
+                },
+                // {
+                //     name: 'demo-15?isSinglePage=true',
+                //     text: '全屏性能测试',
+                //     level: 2
+                // }
+            ],
+            isSinglePage: window.location.search.indexOf('isSinglePage=true') > 0
         };
     }
 };
